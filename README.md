@@ -15,14 +15,16 @@ Dieses Programm hängt ab von
 * pkg-config
 
 ##Starten
-entpacke das Programm mit
-> tar -xvzf booklist.tgz
+> curl https://nodeload.github.com/eri451/booklist/tar.gz/master | tar xvz
+> cd booklist-master
+> make
+> ./booklist [file]
 
-oder nutze z.B. ark
-
+oder
+> git clone https://github.com/eri451/booklist.git
 > cd booklist
 > make
-> ./booklist
+> ./booklist [file]
 
 ##Danksagungen
 Ich möchte mich herzlich bei meinen Freunden vom c3d2, meinem Vater und
