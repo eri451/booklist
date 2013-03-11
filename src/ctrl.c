@@ -27,6 +27,7 @@
 
 #define MIN(a, b) ((a) < (b)) ? (a) : (b)
 #define FILE_PATH "./data/booklist.txt"
+char* filename = FILE_PATH;
 
 /*    ListControls {{{ */
 int compare(int field, void* item1, void* item2)   /* Vergleicht 2 media-Strukturen   */
@@ -142,7 +143,7 @@ void add_to_list(tList *list,               /* fuege ein neues Element der Liste
 
         tmp->id = ident;
 
-        save(FILE_PATH, tmp);     /* Speicher das Element auf der Festplatte */
+        save(filename, tmp);     /* Speicher das Element auf der Festplatte */
         InsertSorted(list, tmp, BY_ID, ASC_ORDER, compare); /* fuege des sortiert ein */
     }
 }
@@ -159,7 +160,7 @@ void remove_from_list(tList *list, int ident) /* Loescht einen Listeneintrag mit
         }
         tmp = GetNext(list);
     }
-    save_list(FILE_PATH, list); /* speicher die Liste auf der Festplatte */
+    save_list(filename, list); /* speicher die Liste auf der Festplatte */
 }
 /* }}} */
 
@@ -262,13 +263,13 @@ void load(char* filename, tList* target)  /* Liest eine Datei und baut daraus ei
 
 int main(int argc, char *argv[])  /* Programmstart */
 {
-    char filename[128];
     tList *medialist = NULL;
 
     if (argc == 2)
-        filename = argv[1];
-    else
-        filename = FILE_PATH;
+    {
+        filename = (char*)calloc(strlen(argv[1]), sizeof(char));
+        strncpy(filename,argv[1],strlen(argv[1]));
+    }
 
     media *book = NULL;
     medialist = CreateList();    /* erzeuge eine neue Liste       */
@@ -277,6 +278,9 @@ int main(int argc, char *argv[])  /* Programmstart */
     gtk_init(&argc, &argv);      /* initialisiere die graphische Nutzerschnittstelle */
     draw_gui(medialist);         /* stell die Liste dem Nutzer dar */
     gtk_main();                  /* uebergib GTK seine Rechte und Pflichten */
+
+    if (strcmp(filename, FILE_PATH))
+        free(filename);
 
     return EXIT_SUCCESS;         /* das war's */
 }
