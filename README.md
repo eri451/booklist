@@ -17,6 +17,7 @@ Dieses Programm hängt ab von
 ##Starten
 entpacke das Programm mit
 > tar -xvzf booklist.tgz
+
 oder nutze z.B. ark
 
 > cd booklist
