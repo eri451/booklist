@@ -16,14 +16,20 @@ Dieses Programm hängt ab von
 
 ##Starten
 > curl https://nodeload.github.com/eri451/booklist/tar.gz/master | tar xvz
+
 > cd booklist-master
+
 > make
+
 > ./booklist [file]
 
 oder
 > git clone https://github.com/eri451/booklist.git
+
 > cd booklist
+
 > make
+
 > ./booklist [file]
 
 ##Danksagungen
