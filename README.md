@@ -11,4 +11,4 @@ Eine Liste von Artikeln die im Lager liegen.
 
 ##Lizenz
 GNU Public License
-> cat booklist/LICENCE
+> cat storelist/LICENCE
