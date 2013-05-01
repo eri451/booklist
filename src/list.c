@@ -19,63 +19,63 @@
  *****************************************************************************/
 
 #include <stdlib.h>
-#include <malloc.h>
+//#include <malloc.h>
 #include "list.h"
 
 /*    Listenops   {{{*/
 
-tList *CreateList(void)  /* erzeugt eine Liste */
+tList *CreateList(void)                             /* erzeugt eine Liste */
 {
-    tList *ptmp = NULL;              /* erzeuge einen Zeiger fuer eine neue Listenstruktur */
-    ptmp = malloc(sizeof (tList));   /* nimm soviel Speicher wie eine Listen-Struktur braucht */
-    if (ptmp)                        /* und gib ptmp die Adresse. Falls das glueckte */
+    tList *ptmp = NULL;                             /* erzeuge einen Zeiger fuer eine neue Listenstruktur */
+    ptmp = malloc(sizeof (tList));                  /* nimm soviel Speicher wie eine Listen-Struktur braucht */
+    if (ptmp)                                       /* und gib ptmp die Adresse. Falls das glueckte */
         ptmp->phead = ptmp->ptail = ptmp->pcurr = NULL;   /* lass alle Zeiger der Struktur auf 0x0 zeigen */
-    return ptmp;                    /* dann gib mir den Zeiger auf meine neue Listenstruktur */
+    return ptmp;                                    /* dann gib mir den Zeiger auf meine neue Listenstruktur */
 }
 
-long DeleteList(tList *pList)  /* Loescht eine Liste und ihre Elemente */
+long DeleteList(tList *pList)                       /* Loescht eine Liste und ihre Elemente */
 {
-    if (pList == NULL)   /* falls dir ein Verweis auf 0x0 gegeben wird mache gar nichts */
+    if (pList == NULL)                              /* falls dir ein Verweis auf 0x0 gegeben wird mache gar nichts */
         return 0;
 
     tcnct *tmp;
-    tmp = GetFirst(pList);   /* nimm das erste Listenelement der Liste */
-    while (tmp != NULL)      /* solange du weitere Elemente findest */
+    tmp = GetFirst(pList);                          /* nimm das erste Listenelement der Liste */
+    while (tmp != NULL)                             /* solange du weitere Elemente findest */
     {
-        RemoveItem(pList);   /* schmeiss sie aus dieser Liste raus */
+        RemoveItem(pList);                          /* schmeiss sie aus dieser Liste raus */
         tmp = GetNext(pList);
     }
     pList->phead = pList->ptail = pList->pcurr = NULL;
-    free(pList);             /* gib den belegten Speicher wieder frei */
+    free(pList);                                    /* gib den belegten Speicher wieder frei */
     return 0;
 }
 
 /*}}}*/
 /*     INSERTS     {{{*/
 
-long InsertHead(tList *pList, void *pItemIns)   /* Fuege ein Element am Anfang ein */
+long InsertHead(tList *pList, void *pItemIns)       /* Fuege ein Element am Anfang ein */
 {
-    tcnct *ptmp = NULL;                     /* erzeuge einen Zeiger auf ein neues Element */
-    ptmp = malloc(sizeof(tcnct));           /* hol Speicher fuer ein neues Listenelement */
-    if(ptmp)                                /* geglueckt? */
+    tcnct *ptmp = NULL;                             /* erzeuge einen Zeiger auf ein neues Element */
+    ptmp = malloc(sizeof(tcnct));                   /* hol Speicher fuer ein neues Listenelement */
+    if(ptmp)                                        /* geglueckt? */
     {
         ptmp->pdata = ptmp->pnext = ptmp->pprev = NULL;
-        ptmp->pdata = pItemIns;            /* der pdata-Zeiger soll ab jetzt auf die Datenstruktur zeigen */
-        ptmp->pnext = pList->phead;        /* Sei das naechste Element das "alte" Anfangselement */
-                                           /* Damit ist das neue Element davor (also am Anfang) */
-        if (pList->ptail == NULL)          /* gibt es kein Ende sei ptmp das Element am Ende */
+        ptmp->pdata = pItemIns;                     /* der pdata-Zeiger soll ab jetzt auf die Datenstruktur zeigen */
+        ptmp->pnext = pList->phead;                 /* Sei das naechste Element das "alte" Anfangselement */
+                                                    /* Damit ist das neue Element davor (also am Anfang) */
+        if (pList->ptail == NULL)                   /* gibt es kein Ende sei ptmp das Element am Ende */
             pList->ptail = ptmp;
-        if (pList->phead != NULL)          /* Sollte es schon ein Anfangselement geben soll dessen Vorgaenger */
-            pList->phead->pprev = ptmp;    /* dieses Element sein */
+        if (pList->phead != NULL)                   /* Sollte es schon ein Anfangselement geben soll dessen Vorgaenger */
+            pList->phead->pprev = ptmp;             /* dieses Element sein */
 
-        pList->phead = ptmp;               /* das Anfangselement der Liste sei das soeben eingefuegte */
-        pList->pcurr = ptmp;               /* das aktuelle Element ist das soeben eingefuegte*/
+        pList->phead = ptmp;                        /* das Anfangselement der Liste sei das soeben eingefuegte */
+        pList->pcurr = ptmp;                        /* das aktuelle Element ist das soeben eingefuegte*/
     }
-    return (long)ptmp;                     /* gib die Adresse des aktuellen Elements zurueck */
+    return (long)ptmp;                              /* gib die Adresse des aktuellen Elements zurueck */
 }
 
-long InsertTail(tList *pList, void *pItemIns) /* Fuege ein Element am Ende der Liste ein */
-{                                             /* Prinzip analog zu InsertHead */
+long InsertTail(tList *pList, void *pItemIns)       /* Fuege ein Element am Ende der Liste ein */
+{                                                   /* Prinzip analog zu InsertHead */
     tcnct *ptmp = NULL;
     ptmp = malloc(sizeof(tcnct));
     if(ptmp)
@@ -95,33 +95,33 @@ long InsertTail(tList *pList, void *pItemIns) /* Fuege ein Element am Ende der L
     return (long)ptmp;
 }
 
-long InsertBehind(tList *pList, void *pItemIns) /* Fuege ein Element hinter dem aktuellen ein */
+long InsertBehind(tList *pList, void *pItemIns)     /* Fuege ein Element hinter dem aktuellen ein */
 {
     if ((pList->phead == NULL && pList->ptail == NULL) || pList->pcurr == NULL)
-        return InsertTail(pList, pItemIns);     /* falls die Liste keinen Anfang und kein Ende hat oder das */
-                                                /* aktuelle Element nicht vorhanden ist fuege am Ende ein    */
+        return InsertTail(pList, pItemIns);         /* falls die Liste keinen Anfang und kein Ende hat oder das */
+                                                    /* aktuelle Element nicht vorhanden ist fuege am Ende ein    */
     tcnct *ptmp = NULL;
-    ptmp = malloc(sizeof(tcnct));               /* hol Speicher fuer ein neues Element */
+    ptmp = malloc(sizeof(tcnct));                   /* hol Speicher fuer ein neues Element */
     if(ptmp)
     {
         ptmp->pdata = ptmp->pnext = ptmp->pprev = NULL;
-        ptmp->pdata = pItemIns;                 /* der pdata-Zeiger soll ab jetzt auf die Datenstruktur zeigen */
-        ptmp->pprev = pList->pcurr;             /* der Vorgaenger des neuen Elements sei das aktuelle */
-        ptmp->pnext = pList->pcurr->pnext;      /* der Nachfolger sei der Nachfolger des aktuellen Elements*/
+        ptmp->pdata = pItemIns;                     /* der pdata-Zeiger soll ab jetzt auf die Datenstruktur zeigen */
+        ptmp->pprev = pList->pcurr;                 /* der Vorgaenger des neuen Elements sei das aktuelle */
+        ptmp->pnext = pList->pcurr->pnext;          /* der Nachfolger sei der Nachfolger des aktuellen Elements*/
 
-        if (pList->pcurr->pnext != NULL)        /* falls das aktuelle Element keinen Nachfolger hat*/
-            pList->pcurr->pnext->pprev = ptmp;  /* soll der Vorgaenger des Nachfolgers des aktuellen Elements das neue sein */
-        if (pList->pcurr == pList->ptail)       /* falls das das aktuelle Element das Element am Ende der Liste ist*/
-            pList->ptail  = ptmp;               /* dann sei das Element am Ende des Liste das neue Element */
+        if (pList->pcurr->pnext != NULL)            /* falls das aktuelle Element keinen Nachfolger hat*/
+            pList->pcurr->pnext->pprev = ptmp;      /* soll der Vorgaenger des Nachfolgers des aktuellen Elements das neue sein */
+        if (pList->pcurr == pList->ptail)           /* falls das das aktuelle Element das Element am Ende der Liste ist*/
+            pList->ptail  = ptmp;                   /* dann sei das Element am Ende des Liste das neue Element */
 
-        pList->pcurr->pnext = ptmp;             /* der Nachfolger des aktuellen Elements sei das neue Element */
-        pList->pcurr = ptmp;                    /* das aktuelle Element sei das neue Element */
+        pList->pcurr->pnext = ptmp;                 /* der Nachfolger des aktuellen Elements sei das neue Element */
+        pList->pcurr = ptmp;                        /* das aktuelle Element sei das neue Element */
     }
-    return (long)ptmp;                          /* gib die Adresse des aktuellen Elements zurueck */
+    return (long)ptmp;                              /* gib die Adresse des aktuellen Elements zurueck */
 }
 
-long InsertBefore(tList *pList, void *pItemIns) /* Fuege ein Element vor dem aktuellen ein*/
-{                                               /* analog zu InsertBehind */
+long InsertBefore(tList *pList, void *pItemIns)     /* Fuege ein Element vor dem aktuellen ein*/
+{                                                   /* analog zu InsertBehind */
     if ((pList->phead == NULL && pList->ptail == NULL) || pList->pcurr == NULL)
         return InsertHead(pList, pItemIns);
 
@@ -145,15 +145,15 @@ long InsertBefore(tList *pList, void *pItemIns) /* Fuege ein Element vor dem akt
     return (long)ptmp;
 }
 
-long InsertSorted(tList *pList,           /* Fuege sortiert in eine Liste ein */
+long InsertSorted(tList *pList,                     /* Fuege sortiert in eine Liste ein */
                   void  *pItemIns,
                   int    field,
                   int    order,
                   int  (*compare)(int, void*, void*)
                  )
 {
-    if (pList->pcurr == NULL)                    /* ist die Liste leer */
-        return InsertHead(pList, pItemIns);      /* fuege am Anfang ein */
+    if (pList->pcurr == NULL)                       /* ist die Liste leer */
+        return InsertHead(pList, pItemIns);         /* fuege am Anfang ein */
 
     void *tmp = NULL;
     if (order == ASC_ORDER)                      /* falls aufsteigend  */
@@ -193,12 +193,12 @@ void *GetSelected(tList *pList)
 }
 
 void *GetFirst(tList *pList)
-{  /* hol vom Anfangselement der Liste die Adresse der Datenstruktur und gib diese zurueck */
+{                                               /* hol vom Anfangselement der Liste die Adresse der Datenstruktur und gib diese zurueck */
     void *ptmp = NULL;
     if(pList->phead)
     {
-        pList->pcurr = pList->phead;   /* setzt das Element am Ende der List als aktuelles Element */
-        ptmp = pList->pcurr->pdata;    /* gib ptmp die Adresse der Datenstruktur */
+        pList->pcurr = pList->phead;            /* setzt das Element am Ende der List als aktuelles Element */
+        ptmp = pList->pcurr->pdata;             /* gib ptmp die Adresse der Datenstruktur */
     }
     return ptmp;
 }
@@ -208,8 +208,8 @@ void *GetLast(tList *pList)
     void *ptmp = NULL;
     if(pList->ptail)
     {
-        pList->pcurr = pList->ptail;  /* setzt das Element am Anfang der Liste als aktuelles Element */
-        ptmp = pList->pcurr->pdata;   /* gib ptmp die Adresse der Datenstruktur */
+        pList->pcurr = pList->ptail;            /* setzt das Element am Anfang der Liste als aktuelles Element */
+        ptmp = pList->pcurr->pdata;             /* gib ptmp die Adresse der Datenstruktur */
     }
     return ptmp;
 }
@@ -217,10 +217,10 @@ void *GetLast(tList *pList)
 void *GetNext(tList *pList)
 {  /* hol vom Nachfolger des aktuellen Elements die Adresse der Datenstruktur und gib diese zurueck */
     void *ptmp = NULL;
-    if(pList->pcurr && pList->pcurr->pnext)  /* sofern es ein aktuelles Element und davon einen Nachfolger gibt */
+    if(pList->pcurr && pList->pcurr->pnext)     /* sofern es ein aktuelles Element und davon einen Nachfolger gibt */
     {
-        pList->pcurr = pList->pcurr->pnext;  /* mache den Nachfolger zum aktuellen Element */
-        ptmp = pList->pcurr->pdata;          /* gib ptmp die Adresse der Datenstruktur */
+        pList->pcurr = pList->pcurr->pnext;     /* mache den Nachfolger zum aktuellen Element */
+        ptmp = pList->pcurr->pdata;             /* gib ptmp die Adresse der Datenstruktur */
     }
     return ptmp;
 }
@@ -228,10 +228,10 @@ void *GetNext(tList *pList)
 void *GetPrev(tList *pList)
 {  /* hol vom Vorgaenger des aktuellen Elements die Adresse der Datenstruktur und gib diese zurueck */
     void *ptmp = NULL;
-    if(pList->pcurr && pList->pcurr->pprev)  /* sofern es ein aktuelles Element und davon einen Vorgaenger gibt */
+    if(pList->pcurr && pList->pcurr->pprev)     /* sofern es ein aktuelles Element und davon einen Vorgaenger gibt */
     {
-        pList->pcurr = pList->pcurr->pprev;  /* mache den Vorgaenger zum aktuellen Element */
-        ptmp = pList->pcurr->pdata;          /* gib ptmp die Adresse der Datenstruktur */
+        pList->pcurr = pList->pcurr->pprev;     /* mache den Vorgaenger zum aktuellen Element */
+        ptmp = pList->pcurr->pdata;             /* gib ptmp die Adresse der Datenstruktur */
     }
     return ptmp;
 }
@@ -242,9 +242,9 @@ void *GetIndexed(tList *pList, int Idx)
     int i;
 
     ptmp = GetFirst(pList);
-    for (i = 0; i == Idx; i++)  /* zaehle solange hoch bis i gleich Idx ist */
+    for (i = 0; i == Idx; i++)                  /* zaehle solange hoch bis i gleich Idx ist */
     {
-        ptmp = GetNext(pList);  /* hole immer die Adresse des naechsten Elements */
+        ptmp = GetNext(pList);                  /* hole immer die Adresse des naechsten Elements */
     }
     return ptmp;
 }
@@ -252,9 +252,9 @@ void *GetIndexed(tList *pList, int Idx)
 /*}}}*/
 /*     DELETE      {{{*/
 
-long RemoveItem(tList *pList)   /* Loeschen des aktuellen Elements aus der Liste */
+long RemoveItem(tList *pList)                   /* Loeschen des aktuellen Elements aus der Liste */
 {
-    if(pList->pcurr)            /* sofern es ein aktuelles Element gibt */
+    if(pList->pcurr)                            /* sofern es ein aktuelles Element gibt */
     {
         if(pList->pcurr->pprev == NULL)         /* wenn es keinen Vorgaenger hat */
         {
@@ -264,9 +264,8 @@ long RemoveItem(tList *pList)   /* Loeschen des aktuellen Elements aus der Liste
 
             if(!pList->phead)                   /* hat es nicht geklappt (pcurr hat keinen Nachfolger) */
                 pList->ptail = NULL;            /* ist die Liste leer (es gibt weder ein Element am Anfang noch am Ende) */
-        }
-        else         /* sollte es keinen Vorgaenger geben */
-        {            /* dann sei der Nachfolger des Vorgaengers des aktuellen Elements der Nachfolger des aktuellen Elements */
+        } else {                                   /* sollte es keinen Vorgaenger geben */
+                                       /* dann sei der Nachfolger des Vorgaengers des aktuellen Elements der Nachfolger des aktuellen Elements */
             pList->pcurr->pprev->pnext = pList->pcurr->pnext;
             if(pList->pcurr->pnext == NULL)         /* falls das aktuelle Element das letzte in der Liste ist */
                 pList->ptail = pList->pcurr->pprev; /* soll der Vorgaenger das letzte Element der Liste werden */

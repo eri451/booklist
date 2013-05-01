@@ -12,7 +12,7 @@ typedef struct tCONNECT
     struct tCONNECT *pnext;
     struct tCONNECT *pprev;
     void            *pdata;
-}tcnct;
+} tcnct;
 
 typedef struct
 {
