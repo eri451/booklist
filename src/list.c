@@ -57,17 +57,18 @@ long InsertHead(tList *pList, void *pItemIns)       /* Fuege ein Element am Anfa
 {
     tcnct *ptmp = NULL;                             /* erzeuge einen Zeiger auf ein neues Element */
     ptmp = malloc(sizeof(tcnct));                   /* hol Speicher fuer ein neues Listenelement */
-    if(ptmp)                                        /* geglueckt? */
-    {
+    if (ptmp) {                                      /* geglueckt? */
         ptmp->pdata = ptmp->pnext = ptmp->pprev = NULL;
         ptmp->pdata = pItemIns;                     /* der pdata-Zeiger soll ab jetzt auf die Datenstruktur zeigen */
         ptmp->pnext = pList->phead;                 /* Sei das naechste Element das "alte" Anfangselement */
                                                     /* Damit ist das neue Element davor (also am Anfang) */
-        if (pList->ptail == NULL)                   /* gibt es kein Ende sei ptmp das Element am Ende */
+        if (pList->ptail == NULL) {                 /* gibt es kein Ende sei ptmp das Element am Ende */
             pList->ptail = ptmp;
-        if (pList->phead != NULL)                   /* Sollte es schon ein Anfangselement geben soll dessen Vorgaenger */
+        }
+        if (pList->phead != NULL) {                  /* Sollte es schon ein Anfangselement geben soll dessen Vorgaenger */
             pList->phead->pprev = ptmp;             /* dieses Element sein */
-
+        }
+        
         pList->phead = ptmp;                        /* das Anfangselement der Liste sei das soeben eingefuegte */
         pList->pcurr = ptmp;                        /* das aktuelle Element ist das soeben eingefuegte*/
     }
@@ -78,8 +79,7 @@ long InsertTail(tList *pList, void *pItemIns)       /* Fuege ein Element am Ende
 {                                                   /* Prinzip analog zu InsertHead */
     tcnct *ptmp = NULL;
     ptmp = malloc(sizeof(tcnct));
-    if(ptmp)
-    {
+    if (ptmp) {
         ptmp->pdata = ptmp->pnext = ptmp->pprev = NULL;
         ptmp->pdata = pItemIns;
         ptmp->pprev = pList->ptail;
@@ -102,8 +102,7 @@ long InsertBehind(tList *pList, void *pItemIns)     /* Fuege ein Element hinter 
                                                     /* aktuelle Element nicht vorhanden ist fuege am Ende ein    */
     tcnct *ptmp = NULL;
     ptmp = malloc(sizeof(tcnct));                   /* hol Speicher fuer ein neues Element */
-    if(ptmp)
-    {
+    if (ptmp) {
         ptmp->pdata = ptmp->pnext = ptmp->pprev = NULL;
         ptmp->pdata = pItemIns;                     /* der pdata-Zeiger soll ab jetzt auf die Datenstruktur zeigen */
         ptmp->pprev = pList->pcurr;                 /* der Vorgaenger des neuen Elements sei das aktuelle */
@@ -120,15 +119,14 @@ long InsertBehind(tList *pList, void *pItemIns)     /* Fuege ein Element hinter 
     return (long)ptmp;                              /* gib die Adresse des aktuellen Elements zurueck */
 }
 
-long InsertBefore(tList *pList, void *pItemIns)     /* Fuege ein Element vor dem aktuellen ein*/
-{                                                   /* analog zu InsertBehind */
+long InsertBefore(tList *pList, void *pItemIns) {    /* Fuege ein Element vor dem aktuellen ein*/
+                                                    /* analog zu InsertBehind */
     if ((pList->phead == NULL && pList->ptail == NULL) || pList->pcurr == NULL)
         return InsertHead(pList, pItemIns);
 
     tcnct *ptmp = NULL;
     ptmp = malloc(sizeof(tcnct));
-    if (ptmp)
-    {
+    if (ptmp) {
         ptmp->pdata = ptmp->pnext = ptmp->pprev = NULL;
         ptmp->pdata = pItemIns;
         ptmp->pnext = pList->pcurr;
@@ -156,25 +154,30 @@ long InsertSorted(tList *pList,                     /* Fuege sortiert in eine Li
         return InsertHead(pList, pItemIns);         /* fuege am Anfang ein */
 
     void *tmp = NULL;
-    if (order == ASC_ORDER)                      /* falls aufsteigend  */
-    {
+    if (order == ASC_ORDER) {                    /* falls aufsteigend  */
+
         tmp = GetFirst(pList);                   /* nimm das erste Element der Liste */
-        while (tmp != NULL && compare(field, tmp, pItemIns) < 0)   /* solange das schon enthaltene Element "kleiner" ist */
-            tmp = GetNext(pList);                                  /* vergleiche mit dem naechsten */
-        if (tmp != NULL)                         /* stoesst du auf eines das "groesser" ist */
+        while ( (tmp != NULL) 
+            && (compare(field, tmp, pItemIns) < 0) ) {   /* solange das schon enthaltene Element "kleiner" ist */
+            tmp = GetNext(pList);                /* vergleiche mit dem naechsten */
+        }
+        if (tmp != NULL) {                         /* stoesst du auf eines das "groesser" ist */
             InsertBefore(pList, pItemIns);       /* fuege das neue Element davor ein */
-        else
+        } else {
             InsertTail(pList, pItemIns);         /* waren alle "kleiner" fuege das neue Element am Ende ein */
-    }
-    else
-    {
+        }
+    } else {
         tmp = GetLast(pList);                    /* falls absteigend: invertieres Einfuegen */
-        while (tmp != NULL && compare(field, tmp, pItemIns) < 0)
+        while ( (tmp != NULL) 
+            && (compare(field, tmp, pItemIns) < 0) ) {
             tmp = GetPrev(pList);
-        if (tmp != NULL)
+        }
+            
+        if (tmp != NULL) {
             InsertBehind(pList, pItemIns);
-        else
+        } else {
             InsertHead(pList, pItemIns);
+        }
     }
     return (long)pList->pcurr;
 }
@@ -182,18 +185,17 @@ long InsertSorted(tList *pList,                     /* Fuege sortiert in eine Li
 /*}}}*/
 /*     GETS        {{{*/
 
-void *GetSelected(tList *pList)
-{  /* hol vom aktuellen Element der Liste die Adresse der Datenstruktur und gib diese zurueck */
+void *GetSelected(tList *pList) {
+ /* hol vom aktuellen Element der Liste die Adresse der Datenstruktur und gib diese zurueck */
     void *ptmp = NULL;
-    if(pList->pcurr)
-    {
+    if (pList->pcurr) {
         ptmp = pList->pcurr->pdata;
     }
     return ptmp;
 }
 
-void *GetFirst(tList *pList)
-{                                               /* hol vom Anfangselement der Liste die Adresse der Datenstruktur und gib diese zurueck */
+void *GetFirst(tList *pList) {
+ /* hol vom Anfangselement der Liste die Adresse der Datenstruktur und gib diese zurueck */
     void *ptmp = NULL;
     if(pList->phead)
     {
@@ -203,47 +205,43 @@ void *GetFirst(tList *pList)
     return ptmp;
 }
 
-void *GetLast(tList *pList)
-{  /* hol vom Element am Ende der Liste die Adresse der Datenstruktur und gib diese zurueck */
+void *GetLast(tList *pList) {
+/* hol vom Element am Ende der Liste die Adresse der Datenstruktur und gib diese zurueck */
     void *ptmp = NULL;
-    if(pList->ptail)
-    {
+    if(pList->ptail) {
         pList->pcurr = pList->ptail;            /* setzt das Element am Anfang der Liste als aktuelles Element */
         ptmp = pList->pcurr->pdata;             /* gib ptmp die Adresse der Datenstruktur */
     }
     return ptmp;
 }
 
-void *GetNext(tList *pList)
-{  /* hol vom Nachfolger des aktuellen Elements die Adresse der Datenstruktur und gib diese zurueck */
+void *GetNext(tList *pList) {
+/* hol vom Nachfolger des aktuellen Elements die Adresse der Datenstruktur und gib diese zurueck */
     void *ptmp = NULL;
-    if(pList->pcurr && pList->pcurr->pnext)     /* sofern es ein aktuelles Element und davon einen Nachfolger gibt */
-    {
+    if (pList->pcurr && pList->pcurr->pnext) {  /* sofern es ein aktuelles Element und davon einen Nachfolger gibt */
         pList->pcurr = pList->pcurr->pnext;     /* mache den Nachfolger zum aktuellen Element */
         ptmp = pList->pcurr->pdata;             /* gib ptmp die Adresse der Datenstruktur */
     }
     return ptmp;
 }
 
-void *GetPrev(tList *pList)
-{  /* hol vom Vorgaenger des aktuellen Elements die Adresse der Datenstruktur und gib diese zurueck */
+void *GetPrev(tList *pList) {
+/* hol vom Vorgaenger des aktuellen Elements die Adresse der Datenstruktur und gib diese zurueck */
     void *ptmp = NULL;
-    if(pList->pcurr && pList->pcurr->pprev)     /* sofern es ein aktuelles Element und davon einen Vorgaenger gibt */
-    {
+    if(pList->pcurr && pList->pcurr->pprev) {   /* sofern es ein aktuelles Element und davon einen Vorgaenger gibt */
         pList->pcurr = pList->pcurr->pprev;     /* mache den Vorgaenger zum aktuellen Element */
         ptmp = pList->pcurr->pdata;             /* gib ptmp die Adresse der Datenstruktur */
     }
     return ptmp;
 }
 
-void *GetIndexed(tList *pList, int Idx)
-{  /* hol die Adresse der Datenstruktur des Elementes an der Stelle Idx in der Liste und gib diese zurueck */
+void *GetIndexed(tList *pList, int Idx) {
+/* hol die Adresse der Datenstruktur des Elementes an der Stelle Idx in der Liste und gib diese zurueck */
     void *ptmp = NULL;
     int i;
 
     ptmp = GetFirst(pList);
-    for (i = 0; i == Idx; i++)                  /* zaehle solange hoch bis i gleich Idx ist */
-    {
+    for (i = 0; i == Idx; i++) {                /* zaehle solange hoch bis i gleich Idx ist */
         ptmp = GetNext(pList);                  /* hole immer die Adresse des naechsten Elements */
     }
     return ptmp;
@@ -252,10 +250,9 @@ void *GetIndexed(tList *pList, int Idx)
 /*}}}*/
 /*     DELETE      {{{*/
 
-long RemoveItem(tList *pList)                   /* Loeschen des aktuellen Elements aus der Liste */
-{
-    if(pList->pcurr)                            /* sofern es ein aktuelles Element gibt */
-    {
+long RemoveItem(tList *pList) {                 /* Loeschen des aktuellen Elements aus der Liste */
+
+    if (pList->pcurr) {                         /* sofern es ein aktuelles Element gibt */
         if(pList->pcurr->pprev == NULL)         /* wenn es keinen Vorgaenger hat */
         {
             pList->phead = pList->pcurr->pnext; /* setze den Nachfolger als das Anfangselement der Liste */
