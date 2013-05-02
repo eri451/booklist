@@ -1,13 +1,13 @@
-CC=gcc
+CC=clang
 objects=$(patsubst %.c, %.o, $(wildcard src/*.c))
 
-all: booklist
+all: storelist
 
-booklist: $(objects)
-	$(CC) -g -O0 -o $@ $(objects) `pkg-config --libs gtk+-2.0`
+storelist: $(objects)
+	$(CC) -g -v -O0 -o $@ $(objects)
 
 clean: $(objects)
 	rm $(objects)
 
 %.o: %.c
-	$(CC) -c -g -o $@ $< `pkg-config --cflags gtk+-2.0`
+	$(CC) -c -g -o $@ $<
