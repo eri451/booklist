@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {                          /* Programmstart */
     char* filename = NULL;
     char* sort_pa = NULL;
     char* newDS[3];
-//    lager* warehouse;
+    
     tList* storelist = NULL;
     char SET_FILE = 0x00, SET_PRINT = 0x00, SET_SORT = 0x00, SET_RSORT = 0x00;
     char SET_NEW = 0x00, SET_CHANGE = 0x00, SET_DELETE = 0x00;
@@ -35,47 +35,48 @@ int main(int argc, char *argv[]) {                          /* Programmstart */
     storelist = CreateList();                               /* erzeuge eine neue Liste       */
 
     if ( argc > 1 ) {
-        while(argc > argi) {
-            if ( ! (strcmp( "-h", argv[argi] ) ) ) {
+        while ( argc > argi ) {
+            if ( ! ( strcmp( "-h", argv[argi] ) ) ) {
                 help_menue();
                 return EXIT_SUCCESS;
 
-            } else if ( ( ! (strcmp( "-f", argv[argi] ) ) ) 
+            } else if ( ( ! ( strcmp( "-f", argv[argi] ) ) ) 
                     && ( argv[argi+1] != NULL ) ) {
                 argi++;
-                filename = (char*)calloc(strlen(argv[argi])+1, sizeof(char));
-                strcpy(filename, argv[argi]);
+                filename = (char*)calloc( strlen(argv[argi])+1, sizeof(char) );
+                strcpy( filename, argv[argi] );
                 SET_FILE = 0x01;
-            } else if ( ! (strcmp( "-p", argv[argi] ) ) )  {
+            } else if ( ! ( strcmp( "-p", argv[argi] ) ) )  {
                 SET_PRINT = 0x01;
 
-            } else if ( ! (strcmp( "-s", argv[argi] ) )
+            } else if ( ! ( strcmp( "-s", argv[argi] ) )
                     && ( argv[argi+1] != NULL ) ) {
                 argi++;
-                sort_pa = (char*)calloc(strlen(argv[argi])+1, sizeof(char));
+                sort_pa = (char*)calloc( strlen( argv[argi] ) + 1, sizeof(char));
                 strcpy(sort_pa, argv[argi]);
                 SET_SORT = 0x01;
 
-            } else if ( ! (strcmp( "-r", argv[argi] ) ) ) {
+            } else if ( ! ( strcmp( "-r", argv[argi] ) ) ) {
                 SET_RSORT = 0x01;
 
-            } else if ( ( ! (strcmp( "-n", argv[argi] ) ) )
-                    &&( argv[argi+1] != NULL) 
-                    &&( argv[argi+2] != NULL) 
-                    &&( argv[argi+3] != NULL) ) {
+            } else if ( ( ! ( strcmp( "-n", argv[argi] ) ) )
+                        && ( argv[argi+1] != NULL ) 
+                        && ( argv[argi+2] != NULL ) 
+                        && ( argv[argi+3] != NULL ) 
+                      ) {
                 argi++;
-                for (i=0; i <= 2; i++ ,argi++) {
-                    newDS[i] = (char*)calloc(strlen(argv[argi])+1, sizeof(char));
-                    strcpy(newDS[i], argv[argi]);
+                for ( i=0; i <= 2; i++ ,argi++ ) {
+                    newDS[i] = (char*)calloc( strlen( argv[argi] ) + 1, sizeof(char) );
+                    strcpy( newDS[i], argv[argi] );
                 }
                 SET_NEW = 0x01;
 
-            } else if ( ! (strcmp( "-c", argv[argi] ) ) ) {
+            } else if ( ! strcmp( "-c", argv[argi] ) ) {
                 SET_CHANGE = 0x01;
-            } else if ( ! (strcmp( "-d", argv[argi] ) ) ) {
+            } else if ( ! strcmp( "-d", argv[argi] ) ) {
                 SET_DELETE = 0x01;
             } else {
-                printf("%s unknown\n", argv[argi] );
+                printf( "%s unknown\n", argv[argi] );
                 help_menue();
                 return EXIT_SUCCESS;
             }
@@ -87,10 +88,11 @@ int main(int argc, char *argv[]) {                          /* Programmstart */
 
 
     if ( SET_FILE ) {
-        printf("File is set on %s\n", filename);
+        printf( "File is set on %s\n", filename );
         if ( SET_PRINT ) {
 
             load( filename, storelist );
+            print_all_list( storelist );
 
             if ( SET_SORT ) {
                 if ( ! strcmp(sort_pa, "BY_ARTNR") ) {
@@ -107,7 +109,7 @@ int main(int argc, char *argv[]) {                          /* Programmstart */
                     }
                 } else {
                     help_menue();
-                    fprintf(stderr, "*** ERROR sortparameter %s unknown\n", sort_pa);
+                    fprintf( stderr, "*** ERROR sortparameter %s unknown\n", sort_pa );
                     return EXIT_FAILURE;
                 }
             }/* else {
@@ -119,21 +121,22 @@ int main(int argc, char *argv[]) {                          /* Programmstart */
             print_all_list( storelist );
 
         } else if ( SET_NEW ) {
+            load( filename, storelist );
             i = atoi(newDS[0]);
             j = atoi(newDS[2]);
-            add_to_list(storelist, &i, newDS[1], &j );
+            add_to_list( storelist, &i, newDS[1], &j );
         
             print_all_list( storelist );
-            save_list(filename, storelist);
+            save_list( filename, storelist );
         }
     }  else {
         help_menue();
-        fprintf(stderr, "\n\n*** ERROR not File set\n");
+        fprintf( stderr, "\n\n*** ERROR not File set\n" );
         return EXIT_FAILURE;
     }
 
-    if (strcmp(filename, FILE_PATH)) {
-        free(filename);
+    if ( strcmp( filename, FILE_PATH ) ) {
+        free(filename); 
     }
 
     return EXIT_SUCCESS;                                    /* das war's */
