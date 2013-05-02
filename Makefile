@@ -10,4 +10,4 @@ clean: $(objects)
 	rm $(objects)
 
 %.o: %.c
-	$(CC) -c -g -o $@ $<
+	$(CC) -v -c -g -o $@ $<
