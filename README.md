@@ -1,23 +1,41 @@
-#Storelist
+#Booklist
 
-Belegarbeit WS12/13 für Progammierung I
+Belegarbeit WS12/13 fÃ¼r Progammierung I
 
 ##Beschreibung
-Eine Liste von Artikeln die im Lager liegen.
-* Suche nach Artikelnummer und Artikelnamen
-* sortieren nach Artikelnummer, Artikelname
-* Artikel hinzufürgen (automatisches Artnr)
-* Artikel löschen
-* Bestand ändern
+Eine Liste von Medien die an Freunde verliehen wurden.
+* Suche nach Title und Freunden
+* sortieren nach Title, Author, to whom und Nr.
+* Medium hinzu fÃ¼gen (automatisches Datum)
+* Medium lÃ¶schen
 
-##Compile
+##AbhÃ¤ngigkeiten
+Dieses Programm hÃ¤ngt ab von
+* libgtk2.0-dev (> 2.16)
+* pkg-config
 
-FreeBSD
-> gmake Makefile
+##Starten
+> curl https://nodeload.github.com/eri451/booklist/tar.gz/master | tar xvz
 
-Linux
-> make Makefile
+> cd booklist-master
+
+> make
+
+> ./booklist [file]
+
+oder
+> git clone https://github.com/eri451/booklist.git
+
+> cd booklist
+
+> make
+
+> ./booklist [file]
+
+##Danksagungen
+Ich mÃ¶chte mich herzlich bei meinen Freunden vom c3d2, meinem Vater und
+Prof. Beck fÃ¼r alle Anreize und Hilfestellungen bedanken.
 
 ##Lizenz
 GNU Public License
-> cat storelist/LICENSE
+> cat booklist/LICENCE

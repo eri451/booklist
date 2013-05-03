@@ -7,13 +7,15 @@
 /*-------------------------------------------------------------------------*/
 /* Prototypen fuer die Funktionen                                          */
 
-typedef struct tCONNECT {
+typedef struct tCONNECT
+{
     struct tCONNECT *pnext;
     struct tCONNECT *pprev;
     void            *pdata;
-} tcnct;
+}tcnct;
 
-typedef struct {
+typedef struct
+{
     tcnct *phead;
     tcnct *ptail;
     tcnct *pcurr;
