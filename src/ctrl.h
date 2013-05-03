@@ -27,6 +27,8 @@ int match(const char* text, const char* pattern);
 
 void sortList(tList *from, tList *to, int by_field, int in_order);
 
+void sortTheList(tList* list, int by_field, int in_order);    /* um die selbe list sortiert zurück zu geben */
+
 void seachList(tList *from, tList *to, const char *pattern);
 
 int get_new_id(tList *list);

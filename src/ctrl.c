@@ -82,6 +82,20 @@ void sortList(tList *from, tList *to, int by_field, int in_order) /* sortiert ei
     }
 }
 
+void sortTheList(tList* list, int by_field, int in_order)    /* um die selbe list sortiert zurück zu geben */
+{
+    tList* sortedlist = NULL;
+
+    sortedlist = CreateList();
+
+    sortList( list , sortedlist, by_field, in_order );
+
+    DeleteList(list);                                       /* um speicher fehler zu verhindern "sauber" löschen*/
+    list = CreateList();                                    /* neuen speicherplatz für die liste bereitstellen*/
+    
+    memcpy( list, sortedlist, sizeof(tList));
+}
+
 void seachList(tList *from, tList *to, const char *pattern) /* sucht in einer Liste */
 {
     media *tmp = NULL, *cpy = NULL;
